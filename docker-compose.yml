@@ -11,8 +11,15 @@ services:
     image: 'bitnami/mongodb:4.4.6'
     volumes:
       - 'mongodb_data:/bitnami'
+      - ./bin/docker/mongodb-helpers/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
     networks:
       countly:
+    environment:
+      - MONGODB_ROOT_PASSWORD=O3wpVF0YR7EP1VyhZi5SdJFu
+      - MONGODB_USERNAME=countly
+      - MONGODB_PASSWORD=JvvLGXmNdcPvlVszSBqky3Ov
+      - MONGODB_DATABASE=countly
+      - MONGODB_EXTRA_DATABASES=countly_fs,countly_out
 
   countly-api:
     image: 'countly/api:20.11.2'
@@ -20,7 +27,7 @@ services:
     environment:
       - COUNTLY_PLUGINS=mobile,web,desktop,plugins,density,locale,browser,sources,views,enterpriseinfo,logger,systemlogs,populator,reports,crashes,push,star-rating,slipping-away-users,compare,server-stats,dbviewer,assistant,times-of-day,compliance-hub,video-intelligence-monetization,alerts,onboarding,consolidate
       # Enterprise Edition: - COUNTLY_PLUGINS=mobile,web,desktop,plugins,density,locale,browser,sources,views,drill,funnels,retention_segments,flows,cohorts,surveys,remote-config,ab-testing,formulas,activity-map,concurrent_users,revenue,logger,systemlogs,populator,reports,crashes,push,geo,block,restrict,users,star-rating,slipping-away-users,compare,server-stats,assistant,dbviewer,crash_symbolication,crashes-jira,groups,white-labeling,alerts,times-of-day,compliance-hub,onboarding,active_users,performance-monitoring,config-transfer,consolidate,data-manager,hooks,dashboards
-      - COUNTLY_CONFIG__MONGODB_HOST=mongodb
+      - "COUNTLY_CONFIG__MONGODB=mongodb://countly:JvvLGXmNdcPvlVszSBqky3Ov@mongodb:27017/countly"
     deploy:
       restart_policy:
         condition: on-failure
@@ -38,7 +45,7 @@ services:
     environment:
       - COUNTLY_PLUGINS=mobile,web,desktop,plugins,density,locale,browser,sources,views,enterpriseinfo,logger,systemlogs,populator,reports,crashes,push,star-rating,slipping-away-users,compare,server-stats,dbviewer,assistant,times-of-day,compliance-hub,video-intelligence-monetization,alerts,onboarding,consolidate
       # Enterprise Edition: - COUNTLY_PLUGINS=mobile,web,desktop,plugins,density,locale,browser,sources,views,drill,funnels,retention_segments,flows,cohorts,surveys,remote-config,ab-testing,formulas,activity-map,concurrent_users,revenue,logger,systemlogs,populator,reports,crashes,push,geo,block,restrict,users,star-rating,slipping-away-users,compare,server-stats,assistant,dbviewer,crash_symbolication,crashes-jira,groups,white-labeling,alerts,times-of-day,compliance-hub,onboarding,active_users,performance-monitoring,config-transfer,consolidate,data-manager,hooks,dashboards
-      - COUNTLY_CONFIG__MONGODB_HOST=mongodb
+      - "COUNTLY_CONFIG__MONGODB=mongodb://countly:JvvLGXmNdcPvlVszSBqky3Ov@mongodb:27017/countly"
     networks:
       countly:
     depends_on:
